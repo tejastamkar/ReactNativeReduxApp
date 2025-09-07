@@ -4,21 +4,25 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import {
   SafeAreaProvider,
 } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/RootNavigator';
+import DeviceInfo from 'react-native-device-info';
+
 type ScreenName = keyof RootStackParamList; 
+
 interface MenuItem {
   title: string;
   screen: ScreenName;
 }
+
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Home'
-
 >;
 
 interface Props {
@@ -26,12 +30,15 @@ interface Props {
 }
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
-  const menuItems :MenuItem[] = [
-    { title: 'Cart', screen: 'Cart' as const },
-    { title: 'Large List', screen: 'LargeList' as const },
-    { title: 'User List', screen: 'Users' as const },
-    { title: 'Token Screen', screen: 'Token' as const },
+  const menuItems: MenuItem[] = [
+    { title: 'Cart', screen: 'Cart' },
+    { title: 'Large List', screen: 'LargeList' },
+    { title: 'User List', screen: 'Users' },
+    { title: 'Token Screen', screen: 'Token' },
   ];
+
+  const appVersion = DeviceInfo.getVersion();
+  const platform = Platform.OS === 'ios' ? 'iOS' : 'Android';
 
   return (
     <SafeAreaProvider style={styles.container}>
@@ -48,6 +55,16 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
             <Text style={styles.buttonText}>{item.title}</Text>
           </TouchableOpacity>
         ))}
+
+        {/* Platform and version info */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            Platform: {platform}
+          </Text>
+          <Text style={styles.footerText}>
+            App Version: {appVersion}
+          </Text>
+        </View>
       </View>
     </SafeAreaProvider>
   );
@@ -90,6 +107,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     textAlign: 'center',
+  },
+  footer: {
+    marginTop: 30,
+    alignItems: 'center',
+  },
+  footerText: {
+    fontSize: 14,
+    color: '#333',
   },
 });
 
