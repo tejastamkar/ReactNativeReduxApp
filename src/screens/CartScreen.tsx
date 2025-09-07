@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
+import ConfettiCannon from 'react-native-confetti-cannon';
 import {
   CartItem,
   removeFromCart,
@@ -20,7 +21,7 @@ import {
 const CartScreen: React.FC = () => {
   const { items, total } = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch();
-
+  const [showConfetti, setShowConfetti] = useState(false);
   const handleRemoveItem = (id: string) => {
     Alert.alert(
       'Remove Item',
@@ -43,6 +44,28 @@ const CartScreen: React.FC = () => {
       [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Clear', onPress: () => dispatch(clearCart()) },
+      ],
+    );
+  };
+
+  const handleCheckout = () => {
+    Alert.alert(
+      'Checkout',
+      `Are you sure you want to checkout with ${
+        items.length
+      } item(s) for total of ₹${total.toFixed(2)}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Checkout',
+          onPress: () => {
+            setShowConfetti(true);
+            setTimeout(() => {
+              setShowConfetti(false);
+              dispatch(clearCart());
+            }, 3000);
+          },
+        },
       ],
     );
   };
@@ -102,7 +125,7 @@ const CartScreen: React.FC = () => {
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}
       />
-
+      {showConfetti && <ConfettiCannon count={200} origin={{ x: -10, y: 0 }} />}
       <View style={styles.footer}>
         <View style={styles.totalContainer}>
           <Text style={styles.totalText}>Total: ₹{total.toFixed(2)}</Text>
@@ -112,7 +135,10 @@ const CartScreen: React.FC = () => {
           <Text style={styles.clearButtonText}>Clear Cart</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.checkoutButton}>
+        <TouchableOpacity
+          style={styles.checkoutButton}
+          onPress={handleCheckout}
+        >
           <Text style={styles.checkoutButtonText}>Checkout</Text>
         </TouchableOpacity>
       </View>

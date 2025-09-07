@@ -29,7 +29,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function UserStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="UserList" component={UserListScreen} />
       <Stack.Screen name="UserDetails" component={UserDetailsScreen} />
     </Stack.Navigator>
@@ -63,7 +63,7 @@ const RootNavigator: React.FC = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        headerShown: false,
+        headerShown: true,
         tabBarIcon: ({ focused, color, size }) => TabBarIcon({ focused, color, size, route }),
         tabBarActiveTintColor: '#6C63FF',
         tabBarInactiveTintColor: 'gray',

@@ -25,9 +25,9 @@ const LargeListScreen: React.FC = () => {
   // Generate a large dataset for performance testing
   const data: ListItem[] = useMemo(() => {
     return Array.from({ length: 10000 }, (_, index) => ({
-      id: `item-${index}`,
-      title: `Item ${index + 1}`,
-      subtitle: `This is the description for item ${index + 1}`,
+      id: `product-${index}`,
+      title: `Product ${index + 1}`,
+      subtitle: `This is the description for product ${index + 1}`,
       price: Math.floor(Math.random() * 100) + 1,
     }));
   }, []);
@@ -68,11 +68,7 @@ const LargeListScreen: React.FC = () => {
 
   return (
     <SafeAreaProvider style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Large List ({data.length} items)</Text>
-        <Text style={styles.headerSubtitle}>Optimized with FlatList</Text>
-      </View>
-      
+     
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -92,7 +88,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-    paddingTop: 20,
   },
   oldRow : {
     backgroundColor: 'white',
